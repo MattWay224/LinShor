@@ -1,0 +1,6 @@
+.idea
+.gradle
+.vscode
+*.iml
+.editorconfig
+build
