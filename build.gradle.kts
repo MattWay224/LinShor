@@ -2,10 +2,12 @@ plugins {
     java
     id("org.springframework.boot") version "3.4.3"
     id("io.spring.dependency-management") version "1.1.7"
+    id("checkstyle")
+    id("com.diffplug.spotless") version "6.25.0"
 }
 
 group = "com.m"
-version = "0.0.1-SNAPSHOT"
+version = "0.0.2"
 
 java {
     toolchain {
@@ -17,6 +19,21 @@ configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
     }
+}
+
+spotless {
+    java {
+        indentWithTabs(4)
+        indentWithSpaces(4)
+        endWithNewline()
+        trimTrailingWhitespace()
+        removeUnusedImports()
+    }
+}
+
+checkstyle {
+    toolVersion = "10.15.0"
+    configFile = rootProject.file("config/checkstyle/checkstyle.xml")
 }
 
 repositories {
@@ -34,6 +51,10 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
+
+tasks.withType<Checkstyle>().configureEach {
+    reports {
+        html.required.set(true)
+        xml.required.set(false)
+    }
 }
