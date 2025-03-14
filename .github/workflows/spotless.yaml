@@ -4,39 +4,37 @@ on:
   push:
     branches:
       - main
-      - develop
   pull_request:
     branches:
       - main
-      - develop
 
 jobs:
   check-formatting:
-    name: Run Spotless and Checkstyle
+    name: Run spotless and checkstyle
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set Up JDK 17
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Cache Gradle Dependencies
+      - name: Cache gradle dependencies
         uses: actions/cache@v4
         with:
           path: ~/.gradle/caches
           key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle.kts', '**/gradle-wrapper.properties') }}
           restore-keys: gradle-${{ runner.os }}-
 
-      - name: Grant Execute Permissions for Gradle
+      - name: Change execute permission
         run: chmod +x gradlew
 
-      - name: Run Spotless Check (Formatting)
+      - name: Run spotless
         run: ./gradlew spotlessCheck
 
-      - name: Run Checkstyle
+      - name: Run checkstyle
         run: ./gradlew checkstyleMain checkstyleTest
