@@ -2,18 +2,20 @@ package com.m.linshor.services;
 
 import com.m.linshor.entities.Mapping;
 import com.m.linshor.repositories.MappingDao;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
 @Service
 @AllArgsConstructor
 public class InMemoryLinShorService implements LinShorService {
     private MappingDao repository;
-    private static final String BASE62 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private static final String BASE62 =
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private static final int SHORT_URL_LENGTH = 10;
 
     @Override

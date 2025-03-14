@@ -1,13 +1,13 @@
 package com.m.linshor.repositories;
 
 import com.m.linshor.entities.Mapping;
-import org.springframework.stereotype.Repository;
-
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
+
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class MappingDao {
@@ -23,22 +23,19 @@ public class MappingDao {
     }
 
     public Optional<Mapping> findByShortUrl(String shortUrl) {
-        return LINKS.stream()
-                .filter(link -> link.getShortUrl()
-                        .equals(shortUrl)).findFirst();
+        return LINKS.stream().filter(link -> link.getShortUrl().equals(shortUrl)).findFirst();
     }
 
     public Optional<Mapping> findById(int id) {
-        return LINKS.stream()
-                .filter(element -> element.getId() == id)
-                .findFirst();
+        return LINKS.stream().filter(element -> element.getId() == id).findFirst();
     }
 
     public Mapping updateLink(Mapping mapping) {
-        var linkIndex = IntStream.range(0, LINKS.size())
-                .filter(index -> LINKS.get(index).getId() == mapping.getId())
-                .findFirst()
-                .orElse(-1);
+        var linkIndex =
+                IntStream.range(0, LINKS.size())
+                        .filter(index -> LINKS.get(index).getId() == mapping.getId())
+                        .findFirst()
+                        .orElse(-1);
         if (linkIndex > -1) {
             LINKS.set(linkIndex, mapping);
             return mapping;
@@ -54,10 +51,11 @@ public class MappingDao {
     }
 
     public Mapping findByLongUrl(String longUrl) {
-        var linkIndex = IntStream.range(0, LINKS.size())
-                .filter(index -> LINKS.get(index).getUrl().equals(longUrl))
-                .findFirst()
-                .orElse(-1);
+        var linkIndex =
+                IntStream.range(0, LINKS.size())
+                        .filter(index -> LINKS.get(index).getUrl().equals(longUrl))
+                        .findFirst()
+                        .orElse(-1);
         if (linkIndex > -1) {
             return LINKS.get(linkIndex);
         } else {

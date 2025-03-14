@@ -15,6 +15,7 @@ public class Mapping {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
+
     String url;
     String shortUrl;
 }

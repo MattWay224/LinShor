@@ -2,13 +2,14 @@ package com.m.linshor.controllers;
 
 import com.m.linshor.entities.Mapping;
 import com.m.linshor.services.LinShorService;
+
+import java.net.URI;
+import java.util.List;
+import java.util.Optional;
+
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
-import java.net.URI;
 
 @RestController
 @RequestMapping("/linshor/v1")
@@ -56,7 +57,8 @@ public class LinShorController {
     @GetMapping("/{shortUrl}")
     public ResponseEntity<Object> redirectToLongUrl(@PathVariable String shortUrl) {
         Optional<Mapping> mapping = linShorService.findByShortUrl(shortUrl);
-        return mapping.map(m -> ResponseEntity.status(302).location(URI.create(m.getUrl())).build())
+        return mapping
+                .map(m -> ResponseEntity.status(302).location(URI.create(m.getUrl())).build())
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
