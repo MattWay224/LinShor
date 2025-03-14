@@ -13,10 +13,6 @@ import org.springframework.stereotype.Repository;
 public class MappingDao {
     private final List<Mapping> LINKS = new ArrayList<>();
 
-    public List<Mapping> findAllLinks() {
-        return LINKS;
-    }
-
     public Mapping saveLink(Mapping mapping) {
         LINKS.add(mapping);
         return null;
@@ -53,7 +49,7 @@ public class MappingDao {
     public Mapping findByLongUrl(String longUrl) {
         var linkIndex =
                 IntStream.range(0, LINKS.size())
-                        .filter(index -> LINKS.get(index).getUrl().equals(longUrl))
+                        .filter(index -> LINKS.get(index).getLongUrl().equals(longUrl))
                         .findFirst()
                         .orElse(-1);
         if (linkIndex > -1) {

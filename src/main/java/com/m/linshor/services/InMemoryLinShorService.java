@@ -3,7 +3,6 @@ package com.m.linshor.services;
 import com.m.linshor.entities.Mapping;
 import com.m.linshor.repositories.MappingDao;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -19,17 +18,12 @@ public class InMemoryLinShorService implements LinShorService {
     private static final int SHORT_URL_LENGTH = 10;
 
     @Override
-    public List<Mapping> getAllLinks() {
-        return repository.findAllLinks();
-    }
-
-    @Override
     public Optional<Mapping> findByShortUrl(String shortUrl) {
         return repository.findByShortUrl(shortUrl);
     }
 
     @Override
-    public Mapping saveLink(String url) {
+    public Mapping saveLink(String longUrl) {
         String shortUrl;
         do {
             shortUrl = generateShor();
@@ -37,7 +31,7 @@ public class InMemoryLinShorService implements LinShorService {
 
         Mapping urlMapping = new Mapping();
         urlMapping.setShortUrl(shortUrl);
-        urlMapping.setUrl(url);
+        urlMapping.setLongUrl(longUrl);
         return repository.saveLink(urlMapping);
     }
 
@@ -47,8 +41,8 @@ public class InMemoryLinShorService implements LinShorService {
     }
 
     @Override
-    public Mapping updateLink(String url) {
-        Mapping mapping = findByLongUrl(url);
+    public Mapping updateLink(String longUrl) {
+        Mapping mapping = findByLongUrl(longUrl);
         String shortUrl = generateShor();
 
         mapping.setShortUrl(shortUrl);

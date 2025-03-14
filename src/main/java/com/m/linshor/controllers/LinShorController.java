@@ -4,7 +4,6 @@ import com.m.linshor.entities.Mapping;
 import com.m.linshor.services.LinShorService;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 import lombok.AllArgsConstructor;
@@ -17,19 +16,14 @@ import org.springframework.web.bind.annotation.*;
 public class LinShorController {
     private final LinShorService linShorService;
 
-    @GetMapping("")
-    public List<Mapping> findAllLinks() {
-        return linShorService.getAllLinks();
-    }
-
-    @GetMapping("/{shortUrl}")
+    @GetMapping("/find/{shortUrl}")
     public Optional<Mapping> findByShortUrl(@PathVariable String shortUrl) {
         return linShorService.findByShortUrl(shortUrl);
     }
 
     @PostMapping("post")
-    public Mapping saveLink(String url) {
-        return linShorService.saveLink(url);
+    public Mapping saveLink(String longUrl) {
+        return linShorService.saveLink(longUrl);
     }
 
     @GetMapping("/{id}")
@@ -38,8 +32,8 @@ public class LinShorController {
     }
 
     @PutMapping("update")
-    public Mapping updateLink(String url) {
-        return linShorService.updateLink(url);
+    public Mapping updateLink(String longUrl) {
+        return linShorService.updateLink(longUrl);
     }
 
     @DeleteMapping("delete/{id}")
@@ -48,7 +42,7 @@ public class LinShorController {
         return 200;
     }
 
-    @PostMapping("/linshor")
+    @PostMapping("/shortener")
     public ResponseEntity<String> linshorUrl(@RequestBody String longUrl) {
         Mapping mapping = linShorService.saveLink(longUrl);
         return ResponseEntity.ok(mapping.getShortUrl());
@@ -58,7 +52,7 @@ public class LinShorController {
     public ResponseEntity<Object> redirectToLongUrl(@PathVariable String shortUrl) {
         Optional<Mapping> mapping = linShorService.findByShortUrl(shortUrl);
         return mapping
-                .map(m -> ResponseEntity.status(302).location(URI.create(m.getUrl())).build())
+                .map(m -> ResponseEntity.status(302).location(URI.create(m.getLongUrl())).build())
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

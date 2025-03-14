@@ -16,6 +16,6 @@ public class Mapping {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
-    String url;
+    String longUrl;
     String shortUrl;
 }
