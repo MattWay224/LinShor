@@ -13,11 +13,9 @@ public interface LinShorService {
 
     Mapping saveLink(String longUrl);
 
-    Optional<Mapping> findById(int id);
-
     Mapping updateLink(String longUrl);
 
-    void deleteById(int id);
+    void deleteByShortUrl(String id);
 
     Mapping findByLongUrl(String longUrl);
 }

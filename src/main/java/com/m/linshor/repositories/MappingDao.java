@@ -15,15 +15,11 @@ public class MappingDao {
 
     public Mapping saveLink(Mapping mapping) {
         LINKS.add(mapping);
-        return null;
+        return mapping;
     }
 
     public Optional<Mapping> findByShortUrl(String shortUrl) {
         return LINKS.stream().filter(link -> link.getShortUrl().equals(shortUrl)).findFirst();
-    }
-
-    public Optional<Mapping> findById(int id) {
-        return LINKS.stream().filter(element -> element.getId() == id).findFirst();
     }
 
     public Mapping updateLink(Mapping mapping) {
@@ -39,8 +35,8 @@ public class MappingDao {
         return null;
     }
 
-    public void deleteById(int id) {
-        var link = findById(id);
+    public void deleteByShortUrl(String shortUrl) {
+        var link = findByShortUrl(shortUrl);
         if (link.isPresent()) {
             LINKS.remove(link);
         }
