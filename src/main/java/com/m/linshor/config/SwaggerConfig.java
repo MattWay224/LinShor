@@ -10,8 +10,8 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .info(new Info().title("LinShor URL Shortener API")
-                        .version("1.0")
-                        .description("API documentation for the URL shortener service"));
+            .info(new Info().title("LinShor URL Shortener API")
+                .version("1.0")
+                .description("API documentation for the URL shortener service"));
     }
 }

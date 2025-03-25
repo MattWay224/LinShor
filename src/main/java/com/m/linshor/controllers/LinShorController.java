@@ -53,8 +53,7 @@ public class LinShorController {
             @ApiResponse(responseCode = "400", description = "Invalid input")
     })
     public ResponseEntity<String> linshorUrl(@RequestBody @Parameter(
-            description = "The long URL to shorten", required = true)
-                                             String longUrl, HttpServletRequest request) {
+            description = "The long URL to shorten", required = true) String longUrl, HttpServletRequest request) {
         Mapping mapping = linShorService.saveLink(longUrl);
 
         String serverAddress = request.getRequestURL().toString().replace(request.getRequestURI(), "");
