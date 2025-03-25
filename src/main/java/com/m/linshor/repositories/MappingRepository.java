@@ -10,8 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MappingRepository extends JpaRepository<Mapping, Long> {
     Optional<Mapping> findByShortUrl(String shortUrl);
-
-    Optional<Mapping> findById(int id);
-
     Mapping findByLongUrl(String longUrl);
 }

@@ -4,8 +4,10 @@ import com.m.linshor.entities.Mapping;
 import com.m.linshor.services.LinShorService;
 
 import java.net.URI;
+import java.net.URL;
 import java.util.Optional;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,38 +23,42 @@ public class LinShorController {
         return linShorService.findByShortUrl(shortUrl);
     }
 
-    @PostMapping("post")
-    public Mapping saveLink(String longUrl) {
-        return linShorService.saveLink(longUrl);
-    }
-
-    @GetMapping("/{id}")
-    public Optional<Mapping> findById(@PathVariable int id) {
-        return linShorService.findById(id);
-    }
-
     @PutMapping("update")
     public Mapping updateLink(String longUrl) {
         return linShorService.updateLink(longUrl);
     }
 
-    @DeleteMapping("delete/{id}")
-    public int deleteById(@PathVariable int id) {
-        linShorService.deleteById(id);
+    @DeleteMapping("delete/{shortUrl}")
+    public int deleteByShortUrl(@PathVariable String shortUrl) {
+        linShorService.deleteByShortUrl(shortUrl);
         return 200;
     }
 
-    @PostMapping("/shortener")
-    public ResponseEntity<String> linshorUrl(@RequestBody String longUrl) {
+    @PostMapping("/post")
+    public ResponseEntity<String> linshorUrl(@RequestBody String longUrl, HttpServletRequest request) {
         Mapping mapping = linShorService.saveLink(longUrl);
-        return ResponseEntity.ok(mapping.getShortUrl());
+
+        String serverAddress = request.getRequestURL().toString().replace(request.getRequestURI(), "");
+        String fullShortUrl = serverAddress + "/linshor/v1/" + mapping.getShortUrl();
+
+        return ResponseEntity.ok(fullShortUrl);
     }
 
     @GetMapping("/{shortUrl}")
     public ResponseEntity<Object> redirectToLongUrl(@PathVariable String shortUrl) {
         Optional<Mapping> mapping = linShorService.findByShortUrl(shortUrl);
-        return mapping
-                .map(m -> ResponseEntity.status(302).location(URI.create(m.getLongUrl())).build())
-                .orElseGet(() -> ResponseEntity.notFound().build());
+
+        if (mapping.isPresent()) {
+            String longUrl = mapping.get().getLongUrl().trim().replaceAll("^\"|\"$", ""); // Remove surrounding quotes
+
+            try {
+                URI uri = new URL(longUrl).toURI(); // Convert URL to URI safely
+                return ResponseEntity.status(302).location(uri).build();
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body("Invalid URL stored in database: " + longUrl);
+            }
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

@@ -36,11 +36,6 @@ public class InMemoryLinShorService implements LinShorService {
     }
 
     @Override
-    public Optional<Mapping> findById(int id) {
-        return repository.findById(id);
-    }
-
-    @Override
     public Mapping updateLink(String longUrl) {
         Mapping mapping = findByLongUrl(longUrl);
         String shortUrl = generateShor();
@@ -50,8 +45,8 @@ public class InMemoryLinShorService implements LinShorService {
     }
 
     @Override
-    public void deleteById(int id) {
-        repository.deleteById(id);
+    public void deleteByShortUrl(String shortUrl) {
+        repository.deleteByShortUrl(shortUrl);
     }
 
     private String generateShor() {
