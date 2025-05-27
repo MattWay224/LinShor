@@ -11,7 +11,7 @@ version = "0.0.2"
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
@@ -51,6 +51,8 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation ("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
+    testImplementation("org.mockito:mockito-core")
+
 }
 
 
@@ -59,4 +61,8 @@ tasks.withType<Checkstyle>().configureEach {
         html.required.set(true)
         xml.required.set(false)
     }
+}
+
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
 }
