@@ -25,6 +25,9 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push Docker image
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/linshor .
-          docker push ${{ secrets.DOCKER_USERNAME }}/linshor
+          echo "Using Docker tag: $DOCKER_USERNAME/linshor:${{ github.sha }}"
+          docker build -t $DOCKER_USERNAME/linshor:${{ github.sha }} .
+          docker push $DOCKER_USERNAME/linshor:${{ github.sha }}
