@@ -20,6 +20,18 @@ services:
     networks:
       - linshor-network
 
+  nginx:
+    image: nginx:latest
+    container_name: linshor_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - linshor-app
+    networks:
+      - linshor-network
+
   linshor-db:
     image: postgres:15
     container_name: linshor-db
