@@ -1,0 +1,48 @@
+services:
+  linshor-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: linshor-app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    env_file:
+      - .env
+    depends_on:
+      linshor-db:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - linshor-network
+
+  linshor-db:
+    image: postgres:15
+    container_name: linshor-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - linshor_pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - linshor-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  linshor_pgdata:
+
+networks:
+  linshor-network:
+    driver: bridge

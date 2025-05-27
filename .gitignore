@@ -4,3 +4,4 @@
 *.iml
 .editorconfig
 build
+.env
