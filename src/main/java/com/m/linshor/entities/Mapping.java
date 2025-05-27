@@ -1,9 +1,6 @@
 package com.m.linshor.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @AllArgsConstructor
@@ -11,11 +8,15 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
+@Table(name = "mapping")
 public class Mapping {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
+    @Column(unique = true, nullable = false)
     String longUrl;
+
+    @Column(nullable = false, length = 2048)
     String shortUrl;
 }

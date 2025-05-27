@@ -14,16 +14,19 @@ import java.net.URL;
 import java.util.Optional;
 
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/linshor/v1")
-@AllArgsConstructor
 @Tag(name = "URL Shortener API", description = "Operations for URL shortening and redirection")
 public class LinShorController {
     private final LinShorService linShorService;
+
+    public LinShorController(@Qualifier("dbLinShorService") LinShorService linShorService) {
+        this.linShorService = linShorService;
+    }
 
     @PutMapping("/update")
     @Operation(summary = "Update a long URL",
@@ -78,7 +81,7 @@ public class LinShorController {
             String longUrl = mapping.get().getLongUrl().trim().replaceAll("^\"|\"$", "");
 
             try {
-                URI uri = new URL(longUrl).toURI(); // Convert URL to URI safely
+                URI uri = new URL(longUrl).toURI();
                 return ResponseEntity.status(302).location(uri).build();
             } catch (Exception e) {
                 return ResponseEntity.badRequest().body("Invalid URL stored in database: " + longUrl);
